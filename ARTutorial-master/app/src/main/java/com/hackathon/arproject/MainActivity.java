@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     //==========
 
     private static final String LOG_TAG = "MainActivity";
-    static private MapView mMapView;
+    private MapView mMapView;
     private MapCircle mMapCircle;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -140,9 +140,6 @@ public class MainActivity extends AppCompatActivity
     private void onFinishReverseGeoCoding(String result) {
 //        Toast.makeText(LocationDemoActivity.this, "Reverse Geo-coding : " + result, Toast.LENGTH_SHORT).show();
     }
-
-
-
 
 
 
@@ -250,24 +247,27 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        mMapView = (MapView) findViewById(R.id.map_view);
+        //mMapView.setBackground(new ShapeDrawable(new OvalShape()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mMapView.setClipToOutline(true);
+            Log.e("onCreate: awdawdaw ", "awmklsafjklasdfjkldasfjkdlsafjsdalkf");
+        }
+
         txtAndroid = (TextView)findViewById(R.id.txtAndroid);
         relativeLayout = (RelativeLayout)findViewById(R.id.layout);
         pointerIcon = (ImageView) findViewById(R.id.icon);
 
-        checkPermission();
 
+        checkPermission();
 
         //=======================
 
-        mMapView = (MapView) findViewById(R.id.map_view);
+
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        mMapView.setClipToOutline(true);
-        mMapView.setBackground(new ShapeDrawable(new OvalShape()));
 
-
-
-
-
+        //mMapView.setBackground(new ShapeDrawable(new OvalShape()));
 
         //mMapView.setDaumMapApiKey(MapApiConst.DAUM_MAPS_ANDROID_APP_API_KEY);
         mMapView.setCurrentLocationEventListener(this);
@@ -545,8 +545,8 @@ public class MainActivity extends AppCompatActivity
 
             //pointerIcon.setLayoutParams(lp);
             pointerIcon.setVisibility(View.VISIBLE);
-        } else if (isBetween(minAngle, maxAngle, mAzimuthTheoretical)) {
 
+        } else if (isBetween(minAngle, maxAngle, mAzimuthTheoretical)) {
 
         } else {
             //pointerIcon.setVisibility(View.GONE);
@@ -588,6 +588,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupLayout() {
+
         descriptionTextView = (TextView) findViewById(R.id.cameraTextView);
 
         getWindow().setFormat(PixelFormat.UNKNOWN);
@@ -595,6 +596,8 @@ public class MainActivity extends AppCompatActivity
         mSurfaceHolder = surfaceView.getHolder();
         mSurfaceHolder.addCallback(this);
         mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+
     }
 
     @Override
@@ -605,14 +608,16 @@ public class MainActivity extends AppCompatActivity
 
         if (isCameraViewOn) {
             mCamera.stopPreview();
+
             isCameraViewOn = false;
         }
 
         if (mCamera != null) {
             try {
+                mMapView.setClipToOutline(true);
                 mCamera.setPreviewDisplay(mSurfaceHolder);
                 mCamera.startPreview();
-                isCameraViewOn = true;
+                //isCameraViewOn = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -625,6 +630,8 @@ public class MainActivity extends AppCompatActivity
     public void surfaceCreated(SurfaceHolder holder) {
         mCamera = Camera.open();
         mCamera.setDisplayOrientation(0);
+
+
     }
 
     @Override
